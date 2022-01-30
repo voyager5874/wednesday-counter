@@ -1,11 +1,10 @@
-import React, {useEffect, useReducer} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {MainDisplay} from "./components/MainDisplay";
 import {Button} from "./components/Button";
 import {Settings} from "./components/Settings";
 import styled from "styled-components";
 import {
-    counterActionsReducer,
     applySettingsAC,
     setErrorAC,
     showSettingsAC,
@@ -14,50 +13,44 @@ import {
     incrementCounterAC,
     getStateFromStorageAC,
     getMaxFromUserAC,
-    getMinFromUserAC
+    getMinFromUserAC, CounterStateType
 } from "./state/counterActionsReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {RootStateType} from "./state/store";
 
 function App() {
+    const counterState = useSelector<RootStateType, CounterStateType>(state => state.counterState)
+    const dispatch = useDispatch()
 
-    const [counterState, counterActionsDispatch] = useReducer(counterActionsReducer, {
-        counterValue: 0,
-        maxValue: 1,
-        minValue: 0,
-        error: '',
-        settingsVisible: false,
-        maxToBeSet: 0,
-        minToBeSet: 0
-    })
 
     useEffect(() => {
         // debugger
-        counterActionsDispatch(getStateFromStorageAC())
-    }, [])
+        dispatch(getStateFromStorageAC())
+    }, [dispatch])
 
     const incrementCounter = () => {
         // debugger
         if (!counterState.settingsVisible && counterState.counterValue < counterState.maxValue) {
-            counterActionsDispatch(setErrorAC(''))
-            counterActionsDispatch(incrementCounterAC())
+            dispatch(setErrorAC(''))
+            dispatch(incrementCounterAC())
         }
         if (counterState.settingsVisible) {
-            counterActionsDispatch(setErrorAC('set your counter'))
-            setTimeout(() => counterActionsDispatch(setErrorAC('')), 1500)
+            dispatch(setErrorAC('set your counter'))
+            setTimeout(() => dispatch(setErrorAC('')), 1500)
         }
     }
 
     const resetCounter = () => {
-        counterActionsDispatch(resetCounterAC())
+        dispatch(resetCounterAC())
     }
 
     const toggleSettingsVisibility = () => {
         if (counterState.settingsVisible) {
-            // counterActionsDispatch(applySettingsAC(counterState.maxToBeSet, counterState.minToBeSet)) //could be done without parameters (copy from state inside reducer)
-            counterActionsDispatch(applySettingsAC()) //could be done without parameters (copy from state inside reducer)
-            counterActionsDispatch(hideSettingsAC())
-            counterActionsDispatch(resetCounterAC())
+            dispatch(applySettingsAC())
+            dispatch(hideSettingsAC())
+            dispatch(resetCounterAC())
         } else {
-            counterActionsDispatch(showSettingsAC())
+            dispatch(showSettingsAC())
         }
     }
 
@@ -70,26 +63,26 @@ function App() {
 
     const validateNewMax = (newMax: number) => {
         if (newMax > counterState.minToBeSet && newMax > 0) {
-            counterActionsDispatch(setErrorAC(''))
-            counterActionsDispatch(getMaxFromUserAC(newMax))
+            dispatch(setErrorAC(''))
+            dispatch(getMaxFromUserAC(newMax))
             // debugger
 
         } else {
-            newMax <= counterState.minToBeSet ? counterActionsDispatch(setErrorAC('max must be above the min'))
-                : counterActionsDispatch(setErrorAC('negative values not allowed'))
-            setTimeout(() => counterActionsDispatch(setErrorAC('')), 1000)
+            newMax <= counterState.minToBeSet ? dispatch(setErrorAC('max must be above the min'))
+                : dispatch(setErrorAC('negative values not allowed'))
+            setTimeout(() => dispatch(setErrorAC('')), 1000)
         }
     }
 
     const validateNewMin = (newMin: number) => {
         if (newMin < counterState.maxToBeSet && newMin >= 0) {
-            counterActionsDispatch(setErrorAC(''))
-            counterActionsDispatch(getMinFromUserAC(newMin))
+            dispatch(setErrorAC(''))
+            dispatch(getMinFromUserAC(newMin))
 
         } else {
-            newMin >= counterState.maxToBeSet ? counterActionsDispatch(setErrorAC('min must be less than the max'))
-                : counterActionsDispatch(setErrorAC('negative values not allowed'))
-            setTimeout(() => counterActionsDispatch(setErrorAC('')), 1000)
+            newMin >= counterState.maxToBeSet ? dispatch(setErrorAC('min must be less than the max'))
+                : dispatch(setErrorAC('negative values not allowed'))
+            setTimeout(() => dispatch(setErrorAC('')), 1000)
         }
     }
 

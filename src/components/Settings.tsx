@@ -2,6 +2,9 @@ import React from 'react';
 import s from "./Settings.module.css"
 import {LimitValueInput} from "./LimitValueInput";
 import styled from "styled-components";
+import {useSelector} from "react-redux";
+import {RootStateType} from "../state/store";
+import {CounterStateType} from "../state/counterActionsReducer";
 
 type SettingsPropsType = {
     visible: boolean
@@ -12,14 +15,16 @@ type SettingsPropsType = {
 }
 
 export const Settings = (props: SettingsPropsType) => {
+    const counterState = useSelector<RootStateType, CounterStateType>(state => state.counterState)
+
     // debugger
     let visibility = `${props.visible ? s.settingsVisible : s.settingsInvisible}`
 
     return (
         <SettingsWrapper className={visibility}>
-            <LimitValueInput label={"max value"} currentValue={props.maxValue}
+            <LimitValueInput label={"max value"} currentValue={counterState.maxToBeSet}
                              sendValueCallback={(newValue) => props.validateNewMax(newValue)}/>
-            <LimitValueInput label={"min value"} currentValue={props.minValue}
+            <LimitValueInput label={"min value"} currentValue={counterState.minToBeSet}
                              sendValueCallback={(newValue) => props.validateNewMin(newValue)}/>
         </SettingsWrapper>
     );

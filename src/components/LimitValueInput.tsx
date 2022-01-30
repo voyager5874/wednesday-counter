@@ -21,7 +21,6 @@ export const LimitValueInput = (props: LimitValueInputType) => {
     return (
         <LimitValueSetContainer>
             <Label>{props.label}</Label>
-            {/*<Input value={props.currentValue} type="number" min={"0"} onChange={newValueHandler}/>*/}
             <LimitInputField><span
                 style={{
                     // border: "1px solid black",

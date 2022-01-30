@@ -4,11 +4,21 @@ export type CounterStateType = {
     minValue: number
     error: string
     settingsVisible: boolean
-    maxToBeSet: number,
+    maxToBeSet: number
     minToBeSet: number
 }
 
-export const counterActionsReducer = (state: CounterStateType, action: CounterActionsType): CounterStateType => {
+const iniState: CounterStateType = {
+    counterValue: 0,
+    maxValue: 1,
+    minValue: 0,
+    error: '',
+    settingsVisible: false,
+    maxToBeSet: 0,
+    minToBeSet: 0,
+}
+
+export const counterActionsReducer = (state: CounterStateType = iniState, action: CounterActionsType): CounterStateType => {
     switch (action.type) {
         case "INCREMENT":
             return {...state, counterValue: state.counterValue + 1}
@@ -16,8 +26,6 @@ export const counterActionsReducer = (state: CounterStateType, action: CounterAc
             return {...state, counterValue: state.minValue}
         case "SET-ERROR":
             return {...state, error: action.payload.error}
-        // case "APPLY-SETTINGS":
-        //     return {...state, maxValue: action.payload.maxValue, minValue: action.payload.minValue}
         case "APPLY-SETTINGS":
             return {...state, maxValue: state.maxToBeSet, minValue: state.minToBeSet}
         case "SHOW-SETTINGS":
@@ -55,7 +63,6 @@ type CounterActionsType =
     | ApplySettingsActionType
     | ShowSettingsActionType
     | HideSettingsActionType
-    // | GetSettingsFromUserActionType
     | GetStateFromStorageActionType
     | GetMaxFromUserActionType
     | GetMinFromUserActionType
@@ -87,17 +94,6 @@ export const setErrorAC = (error: string) => {
     } as const
 }
 
-// type ApplySettingsActionType = ReturnType<typeof applySettingsAC>
-//
-// export const applySettingsAC = (max: number, min: number) => {
-//     return {
-//         type: "APPLY-SETTINGS",
-//         payload: {
-//             maxValue: max,
-//             minValue: min
-//         }
-//     } as const
-// }
 
 type ApplySettingsActionType = ReturnType<typeof applySettingsAC>
 
