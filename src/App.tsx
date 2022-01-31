@@ -23,7 +23,6 @@ function App() {
 
 
     useEffect(() => {
-        // dispatch(getStateFromStorageAC())
         let savedMax = localStorage.getItem("maxValue")
         let savedMin = localStorage.getItem("minValue")
         let savedCounter = localStorage.getItem('counterValue')
@@ -65,7 +64,6 @@ function App() {
     }
 
     useEffect(() => {
-        // debugger
         localStorage.setItem('maxValue', JSON.stringify(counterState.currentMax))
         localStorage.setItem('minValue', JSON.stringify(counterState.currentMin))
         localStorage.setItem('counterValue', JSON.stringify(counterState.counterValue))
@@ -75,7 +73,6 @@ function App() {
         if (newMax > settings.minToSet && newMax > 0) {
             dispatch(setErrorAC(''))
             dispatch(keepMaxToSetAC(newMax))
-            // debugger
 
         } else {
             newMax <= settings.minToSet ? dispatch(setErrorAC('max must be above the min'))
@@ -101,12 +98,12 @@ function App() {
         <CounterWrapper>
             <Settings validateNewMax={validateNewMax}
                       validateNewMin={validateNewMin}
-
-
             />
             <MainBoardWrapper>
-                <MainDisplay value1={counterState.currentMax} value2={counterState.currentMin} value1Label={"max"}
-                             value2Label={"start"} finish={counterState.counterValue === counterState.currentMax}/>
+                <MainDisplay value1={counterState.currentMax}
+                             value2={counterState.currentMin}
+                             value1Label={"max"}
+                             value2Label={"start"}/>
                 <ControlsWrapper>
                     <Button
                         disabled={counterState.counterValue === counterState.currentMax || Boolean(counterState.error)}

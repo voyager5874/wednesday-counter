@@ -9,14 +9,13 @@ type IndicatorPropsType = {
     value2: number
     value1Label: string
     value2Label: string
-    finish: boolean
 
 }
 export const MainDisplay = (props: IndicatorPropsType) => {
     const counterState = useSelector<RootStateType, CounterStateType>(state=>state.counterState)
     return (
         <Display error={counterState.error}>
-            <DisplayMainValue error={counterState.error} limitReached={props.finish}>
+            <DisplayMainValue error={counterState.error} limitReached={counterState.counterValue === counterState.currentMax}>
                 {counterState.error ? counterState.error : counterState.counterValue}
             </DisplayMainValue>
             <DisplayAdditionalInfoWrapper>

@@ -1,3 +1,5 @@
+import {store} from "./store";
+
 export type SettingsStateType = {
     visible: boolean
     maxToSet: number
@@ -85,3 +87,4 @@ export const applySettingsAC = (maxToSet: number, minToSet: number) : ApplySetti
         minToSet,
     } as const
 }
+// getState().maxToSet
