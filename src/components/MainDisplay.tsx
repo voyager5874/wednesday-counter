@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import {useSelector} from "react-redux";
+import {RootStateType} from "../state/store";
+import {CounterStateType} from "../state/counterReducer";
 
 type IndicatorPropsType = {
-    mainValue: number
-    error: string
     value1: number
     value2: number
     value1Label: string
@@ -12,10 +13,11 @@ type IndicatorPropsType = {
 
 }
 export const MainDisplay = (props: IndicatorPropsType) => {
+    const counterState = useSelector<RootStateType, CounterStateType>(state=>state.counterState)
     return (
-        <Display error={props.error}>
-            <DisplayMainValue error={props.error} limitReached={props.finish}>
-                {props.error ? props.error : props.mainValue}
+        <Display error={counterState.error}>
+            <DisplayMainValue error={counterState.error} limitReached={props.finish}>
+                {counterState.error ? counterState.error : counterState.counterValue}
             </DisplayMainValue>
             <DisplayAdditionalInfoWrapper>
                 <CurrentLimitValue>{props.value1Label}: {props.value1}</CurrentLimitValue>

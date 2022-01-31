@@ -4,83 +4,93 @@ import {MainDisplay} from "./components/MainDisplay";
 import {Button} from "./components/Button";
 import {Settings} from "./components/Settings";
 import styled from "styled-components";
-import {
-    applySettingsAC,
-    setErrorAC,
-    showSettingsAC,
-    resetCounterAC,
-    hideSettingsAC,
-    incrementCounterAC,
-    getStateFromStorageAC,
-    getMaxFromUserAC,
-    getMinFromUserAC, CounterStateType
-} from "./state/counterActionsReducer";
+
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "./state/store";
+import {
+    applySettingsAC,
+    keepMaxToSetAC,
+    keepMinToSetAC,
+    SettingsStateType,
+    toggleSettingsVisibilityAC
+} from "./state/settingsReducer";
+import {CounterStateType, incrementAC, resetAC, setErrorAC, setValueAC} from "./state/counterReducer";
 
 function App() {
     const counterState = useSelector<RootStateType, CounterStateType>(state => state.counterState)
+    const settings = useSelector<RootStateType, SettingsStateType>(state => state.settings)
     const dispatch = useDispatch()
 
 
     useEffect(() => {
-        // debugger
-        dispatch(getStateFromStorageAC())
-    }, [dispatch])
+        // dispatch(getStateFromStorageAC())
+        let savedMax = localStorage.getItem("maxValue")
+        let savedMin = localStorage.getItem("minValue")
+        let savedCounter = localStorage.getItem('counterValue')
+        if(savedMax && savedMin && savedCounter) {
+            let max = Number(savedMax)
+            let min = Number(savedMin)
+            let counter = Number(savedCounter)
+            dispatch(applySettingsAC(max, min))
+            dispatch(setValueAC(counter))
+            dispatch(keepMaxToSetAC(max))
+            dispatch(keepMinToSetAC(min))
+        }
+
+    }, [])
 
     const incrementCounter = () => {
-        // debugger
-        if (!counterState.settingsVisible && counterState.counterValue < counterState.maxValue) {
+        if (!settings.visible && counterState.counterValue < counterState.currentMax) {
             dispatch(setErrorAC(''))
-            dispatch(incrementCounterAC())
+            dispatch(setValueAC(counterState.counterValue + 1))
         }
-        if (counterState.settingsVisible) {
+        if (settings.visible) {
             dispatch(setErrorAC('set your counter'))
             setTimeout(() => dispatch(setErrorAC('')), 1500)
         }
     }
 
     const resetCounter = () => {
-        dispatch(resetCounterAC())
+        dispatch(resetAC())
     }
 
     const toggleSettingsVisibility = () => {
-        if (counterState.settingsVisible) {
-            dispatch(applySettingsAC())
-            dispatch(hideSettingsAC())
-            dispatch(resetCounterAC())
+        if (settings.visible) {
+            dispatch(applySettingsAC(settings.maxToSet, settings.minToSet))
+            dispatch(toggleSettingsVisibilityAC(false))
+            dispatch(resetAC())
         } else {
-            dispatch(showSettingsAC())
+            dispatch(toggleSettingsVisibilityAC(true))
         }
     }
 
     useEffect(() => {
         // debugger
-        localStorage.setItem('maxValue', JSON.stringify(counterState.maxValue))
-        localStorage.setItem('minValue', JSON.stringify(counterState.minValue))
+        localStorage.setItem('maxValue', JSON.stringify(counterState.currentMax))
+        localStorage.setItem('minValue', JSON.stringify(counterState.currentMin))
         localStorage.setItem('counterValue', JSON.stringify(counterState.counterValue))
-    }, [counterState.maxValue, counterState.minValue, counterState.counterValue])
+    }, [counterState.currentMax, counterState.currentMin, counterState.counterValue])
 
     const validateNewMax = (newMax: number) => {
-        if (newMax > counterState.minToBeSet && newMax > 0) {
+        if (newMax > settings.minToSet && newMax > 0) {
             dispatch(setErrorAC(''))
-            dispatch(getMaxFromUserAC(newMax))
+            dispatch(keepMaxToSetAC(newMax))
             // debugger
 
         } else {
-            newMax <= counterState.minToBeSet ? dispatch(setErrorAC('max must be above the min'))
+            newMax <= settings.minToSet ? dispatch(setErrorAC('max must be above the min'))
                 : dispatch(setErrorAC('negative values not allowed'))
             setTimeout(() => dispatch(setErrorAC('')), 1000)
         }
     }
 
     const validateNewMin = (newMin: number) => {
-        if (newMin < counterState.maxToBeSet && newMin >= 0) {
+        if (newMin < settings.maxToSet && newMin >= 0) {
             dispatch(setErrorAC(''))
-            dispatch(getMinFromUserAC(newMin))
+            dispatch(keepMinToSetAC(newMin))
 
         } else {
-            newMin >= counterState.maxToBeSet ? dispatch(setErrorAC('min must be less than the max'))
+            newMin >= settings.maxToSet ? dispatch(setErrorAC('min must be less than the max'))
                 : dispatch(setErrorAC('negative values not allowed'))
             setTimeout(() => dispatch(setErrorAC('')), 1000)
         }
@@ -89,26 +99,22 @@ function App() {
 
     return (
         <CounterWrapper>
-            <Settings visible={counterState.settingsVisible}
-                      maxValue={counterState.maxToBeSet}
-                      minValue={counterState.minToBeSet}
-                      validateNewMax={validateNewMax}
+            <Settings validateNewMax={validateNewMax}
                       validateNewMin={validateNewMin}
 
 
             />
             <MainBoardWrapper>
-                <MainDisplay mainValue={counterState.counterValue} error={counterState.error}
-                             value1={counterState.maxValue} value2={counterState.minValue} value1Label={"max"}
-                             value2Label={"start"} finish={counterState.counterValue === counterState.maxValue}/>
+                <MainDisplay value1={counterState.currentMax} value2={counterState.currentMin} value1Label={"max"}
+                             value2Label={"start"} finish={counterState.counterValue === counterState.currentMax}/>
                 <ControlsWrapper>
                     <Button
-                        disabled={counterState.counterValue === counterState.maxValue || Boolean(counterState.error)}
+                        disabled={counterState.counterValue === counterState.currentMax || Boolean(counterState.error)}
                         name={"inc"}
                         callback={incrementCounter}
                     />
                     <Button
-                        disabled={counterState.counterValue === counterState.minValue || Boolean(counterState.error)}
+                        disabled={counterState.counterValue === counterState.currentMin || Boolean(counterState.error)}
                         name={"reset"}
                         callback={resetCounter}
                     />

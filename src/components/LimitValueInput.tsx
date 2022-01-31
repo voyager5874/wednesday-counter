@@ -9,7 +9,7 @@ type LimitValueInputType = {
 }
 
 export const LimitValueInput = (props: LimitValueInputType) => {
-    // debugger
+
     const plusClickHandler = () => {
         props.sendValueCallback(props.currentValue + 1)
     }
@@ -21,14 +21,16 @@ export const LimitValueInput = (props: LimitValueInputType) => {
     return (
         <LimitValueSetContainer>
             <Label>{props.label}</Label>
-            <LimitInputField><span
-                style={{
+            <LimitInputField>
+                <span style={{
                     // border: "1px solid black",
                     display: "inline-block",
                     height: "100%",
                     paddingTop: "10%",
                     paddingBottom: 0
-                }}>{props.currentValue}</span></LimitInputField>
+                }}>{props.currentValue}
+                </span>
+            </LimitInputField>
             <LimitValueControlsWrapper>
                 <LimitValueControlButtons
                     onClick={plusClickHandler}>+</LimitValueControlButtons>
@@ -148,9 +150,7 @@ const LimitInputField = styled.div`
 
 const Label = styled.label`
   text-shadow: 0 0 3px #fff;
-
-  paddingRight: 40px;
-  marginRight: 10px;
+  margin-right: 40px;
 
 `
 

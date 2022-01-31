@@ -11,14 +11,14 @@ const iniState: SettingsStateType = {
 }
 
 type GetMaxFromUserType = {
-    type: "GET-MAX-FROM-USER"
+    type: "KEEP-MAX-FROM-USER"
     payload: {
         newMax: number
     }
 }
 
 type GetMinFromUserType = {
-    type: "GET-MIN-FROM-USER"
+    type: "KEEP-MIN-FROM-USER"
     payload: {
         newMin: number
     }
@@ -29,15 +29,21 @@ type ToggleSettingsVisibilityActionType = {
     visibility: boolean
 }
 
+export type ApplySettingsActionType = {
+    type: "APPLY-SETTINGS"
+    maxToSet: number
+    minToSet: number
+}
+
 
 
 type SettingsActionsType = GetMaxFromUserType | GetMinFromUserType | ToggleSettingsVisibilityActionType
 
-export const settingsReducer = (state: SettingsStateType, action: SettingsActionsType): SettingsStateType => {
+export const settingsReducer = (state: SettingsStateType = iniState, action: SettingsActionsType): SettingsStateType => {
     switch (action.type) {
-        case "GET-MAX-FROM-USER":
+        case "KEEP-MAX-FROM-USER":
             return {...state, maxToSet: action.payload.newMax}
-        case "GET-MIN-FROM-USER":
+        case "KEEP-MIN-FROM-USER":
             return {...state, minToSet: action.payload.newMin}
         case "TOGGLE-SETTINGS":
             return {...state, visible: action.visibility}
@@ -47,18 +53,18 @@ export const settingsReducer = (state: SettingsStateType, action: SettingsAction
 }
 
 
-export const getMaxFromUserAC = (newMax: number): GetMaxFromUserType=> {
+export const keepMaxToSetAC = (newMax: number): GetMaxFromUserType=> {
     return {
-        type: "GET-MAX-FROM-USER",
+        type: "KEEP-MAX-FROM-USER",
         payload: {
             newMax,
         }
     } as const
 }
 
-export const getMinFromUserAC = (newMin: number): GetMinFromUserType=> {
+export const keepMinToSetAC = (newMin: number): GetMinFromUserType=> {
     return {
-        type: "GET-MIN-FROM-USER",
+        type: "KEEP-MIN-FROM-USER",
         payload: {
             newMin,
         }
@@ -68,6 +74,14 @@ export const getMinFromUserAC = (newMin: number): GetMinFromUserType=> {
 export const toggleSettingsVisibilityAC = (visibility: boolean) : ToggleSettingsVisibilityActionType => {
     return {
         type:"TOGGLE-SETTINGS",
-        visibility
+        visibility,
     }
+}
+
+export const applySettingsAC = (maxToSet: number, minToSet: number) : ApplySettingsActionType => {
+    return {
+        type: "APPLY-SETTINGS",
+        maxToSet,
+        minToSet,
+    } as const
 }
