@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './App.css';
 import {MainDisplay} from "./components/MainDisplay";
 import {Button} from "./components/Button";
@@ -14,7 +14,7 @@ import {
     SettingsStateType,
     toggleSettingsVisibilityAC
 } from "./state/settingsReducer";
-import {CounterStateType, incrementAC, resetAC, setErrorAC, setValueAC} from "./state/counterReducer";
+import {CounterStateType, resetAC, setErrorAC, setValueAC} from "./state/counterReducer";
 
 function App() {
     const counterState = useSelector<RootStateType, CounterStateType>(state => state.counterState)
@@ -22,23 +22,7 @@ function App() {
     const dispatch = useDispatch()
 
 
-    useEffect(() => {
-        let savedMax = localStorage.getItem("maxValue")
-        let savedMin = localStorage.getItem("minValue")
-        let savedCounter = localStorage.getItem('counterValue')
-        if(savedMax && savedMin && savedCounter) {
-            let max = Number(savedMax)
-            let min = Number(savedMin)
-            let counter = Number(savedCounter)
-            dispatch(applySettingsAC(max, min))
-            dispatch(setValueAC(counter))
-            dispatch(keepMaxToSetAC(max))
-            dispatch(keepMinToSetAC(min))
-        }
-
-    }, [])
-
-    const incrementCounter = () => {
+     const incrementCounter = () => {
         if (!settings.visible && counterState.counterValue < counterState.currentMax) {
             dispatch(setErrorAC(''))
             dispatch(setValueAC(counterState.counterValue + 1))
@@ -62,12 +46,6 @@ function App() {
             dispatch(toggleSettingsVisibilityAC(true))
         }
     }
-
-    useEffect(() => {
-        localStorage.setItem('maxValue', JSON.stringify(counterState.currentMax))
-        localStorage.setItem('minValue', JSON.stringify(counterState.currentMin))
-        localStorage.setItem('counterValue', JSON.stringify(counterState.counterValue))
-    }, [counterState.currentMax, counterState.currentMin, counterState.counterValue])
 
     const validateNewMax = (newMax: number) => {
         if (newMax > settings.minToSet && newMax > 0) {

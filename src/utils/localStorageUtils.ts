@@ -1,7 +1,9 @@
-export const saveState = (state: any) => {
+import {RootStateType} from "../state/store";
+
+export const saveState = (state: RootStateType) => {
     try {
         const serializedState = JSON.stringify(state);
-        localStorage.setItem('state', serializedState);
+        localStorage.setItem('counter-app-state', serializedState);
     } catch {
         // ignore write errors
     }
@@ -9,7 +11,7 @@ export const saveState = (state: any) => {
 
 export const loadState = () => {
     try {
-        const serializedState = localStorage.getItem('state');
+        const serializedState = localStorage.getItem('counter-app-state');
         if (serializedState === null) {
             return undefined;
         }

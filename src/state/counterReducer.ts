@@ -16,32 +16,32 @@ const iniState: CounterStateType = {
 
 type IncrementActionType = {
     type: "INCREMENT"
-    }
+}
 
 type SetValueActionType = {
     type: "SET-VALUE"
     counter: number
 }
 
-    type ResetActionType = {
+type ResetActionType = {
     type: "RESET"
-    }
+}
 
-    type SetErrorActionType = {
+type SetErrorActionType = {
     type: "SET-ERROR"
-        error: string
-    }
+    error: string
+}
 
-    // type ApplySettingActionType = {
-    // type: "APPLY-SETTINGS"
-    // }
 
-    type CounterActionsType = IncrementActionType | ResetActionType | SetErrorActionType | ApplySettingsActionType | SetValueActionType
+type CounterActionsType =
+    IncrementActionType
+    | ResetActionType
+    | SetErrorActionType
+    | ApplySettingsActionType
+    | SetValueActionType
 
-export const counterReducer = (state: CounterStateType = iniState, action: CounterActionsType): CounterStateType=> {
-    switch(action.type){
-        case "INCREMENT":
-            return {...state, counterValue: state.counterValue + 1}
+export const counterReducer = (state: CounterStateType = iniState, action: CounterActionsType): CounterStateType => {
+    switch (action.type) {
         case "SET-VALUE":
             return {...state, counterValue: action.counter}
         case "RESET":
@@ -54,12 +54,6 @@ export const counterReducer = (state: CounterStateType = iniState, action: Count
             return state
 
     }
-}
-
-export const incrementAC = (): IncrementActionType => {
-    return {
-        type: "INCREMENT"
-    } as const
 }
 
 export const setValueAC = (counterValue: number): SetValueActionType => {

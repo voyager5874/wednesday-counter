@@ -1,4 +1,3 @@
-import {store} from "./store";
 
 export type SettingsStateType = {
     visible: boolean
@@ -80,6 +79,8 @@ export const toggleSettingsVisibilityAC = (visibility: boolean) : ToggleSettings
     }
 }
 
+//поместил этот AC сюда, хотя использую в counterReducer - думал, что здесь есть возможность прочитать
+// значение настроек из state и не передавать их в качестве параметров
 export const applySettingsAC = (maxToSet: number, minToSet: number) : ApplySettingsActionType => {
     return {
         type: "APPLY-SETTINGS",
@@ -87,4 +88,3 @@ export const applySettingsAC = (maxToSet: number, minToSet: number) : ApplySetti
         minToSet,
     } as const
 }
-// getState().maxToSet

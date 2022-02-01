@@ -94,22 +94,6 @@ const LimitValueControlButtons = styled.button`
   }
 `
 
-const Input = styled.input`
-  width: 60px;
-  height: 35px;
-  font-size: 16px;
-  display: inline-block;
-  background-color: #50717b; /*for compatibility with older browsers*/
-  background-image: linear-gradient(#50717b, #8ecccc);
-  outline: none;
-  border-radius: 5px;
-  border: 2px solid #8ecccc;
-  //border: none;
-  font-weight: bold;
-  text-align: center;
-  appearance: none;
-  //no pseudo-elements for input and other non-container things
-`
 
 const LimitInputField = styled.div`
   width: 60px;
