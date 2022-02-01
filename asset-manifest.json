@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/wednesday-counter/static/css/main.2f3675df.chunk.css",
+    "main.js": "/wednesday-counter/static/js/main.dbc01a7a.chunk.js",
+    "main.js.map": "/wednesday-counter/static/js/main.dbc01a7a.chunk.js.map",
+    "runtime-main.js": "/wednesday-counter/static/js/runtime-main.a984078f.js",
+    "runtime-main.js.map": "/wednesday-counter/static/js/runtime-main.a984078f.js.map",
+    "static/js/2.1567304a.chunk.js": "/wednesday-counter/static/js/2.1567304a.chunk.js",
+    "static/js/2.1567304a.chunk.js.map": "/wednesday-counter/static/js/2.1567304a.chunk.js.map",
+    "static/js/3.250dbdee.chunk.js": "/wednesday-counter/static/js/3.250dbdee.chunk.js",
+    "static/js/3.250dbdee.chunk.js.map": "/wednesday-counter/static/js/3.250dbdee.chunk.js.map",
+    "index.html": "/wednesday-counter/index.html",
+    "static/css/main.2f3675df.chunk.css.map": "/wednesday-counter/static/css/main.2f3675df.chunk.css.map",
+    "static/js/2.1567304a.chunk.js.LICENSE.txt": "/wednesday-counter/static/js/2.1567304a.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a984078f.js",
+    "static/js/2.1567304a.chunk.js",
+    "static/css/main.2f3675df.chunk.css",
+    "static/js/main.dbc01a7a.chunk.js"
+  ]
+}
